@@ -1,0 +1,50 @@
+{    
+    "type": "Microsoft.App/functionapps",
+    "location": "East US 2",
+    "properties": {
+      "environmentId": "/subscriptions/d5af6fa8-d752-4c22-b9f8-d6b297fae8b9/resourceGroups/rg1/providers/Microsoft.App/managedEnvironments/postmantest",
+      "configuration": {
+        "secrets": [
+          {
+            "name": "storage-conn-string",
+            "value": "secret value goes here"
+          }
+        ],
+        "ingress": {
+          "external": true,
+          "targetPort": 80,
+          "allowInsecure": false
+        }
+      },
+      "template": {
+        "container": {
+          "image": "ruslany/functionappdemo:v1.0.0",
+          "env": [
+            {
+                "name": "some-env-var",
+                "value": "some-value"
+            }
+          ]
+        },
+        "storageAccount": {
+          "connectionStringSecretRef": "storage-conn-string"
+        },
+        "scaleUnits": [
+          {
+            "name": "http-functions",
+            "functionNames": [
+              "CreateWorkItem"
+            ],
+            "resources": {
+              "cpu": 0.5,
+              "memory": "1Gi"
+            },
+            "scale": {
+              "minReplicas": 1,
+              "maxReplicas": 5
+            }
+          }
+        ]
+      }
+    }
+  }
