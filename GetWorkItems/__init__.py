@@ -14,6 +14,11 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
     connect_str = os.getenv("AzureWebJobsStorage")
 
+    need_to_fail = os.getenv("BAD_ENV_VAR")
+
+    if need_to_fail:
+        raise Exception("The functionapp failed miserably!")
+
     base64_queue_client = QueueClient.from_connection_string(
                             conn_str=connect_str, queue_name='outqueue',
                             message_encode_policy = BinaryBase64EncodePolicy(),
